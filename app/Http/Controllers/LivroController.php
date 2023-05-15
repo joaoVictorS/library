@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Livro;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,15 @@ class LivroController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        return Livro::create($request->all());
+        if (Livro::create($request->all())) {
+            return response()->json([
+                'mensage' => 'Livro cadastrado com sucesso.'
+            ], 201);
+        }
+        return response()->json([
+            'message' => 'Erro ao cadastrar o livro '
+        ], 404);
+        // return Livro::create($request->all());
     }
 
     /**
@@ -28,7 +37,19 @@ class LivroController extends Controller
      */
     public function show(string $livro)
     {
-        return Livro::findOrFail($livro);
+        $livro = Livro::find($livro);
+
+        if ($livro) {
+            $response = [
+                'livro' => $livro,
+                'testamento' => $livro->testamento
+            ];
+            return $livro;
+        }
+
+        return response()->json([
+            'mensage' => ' Erro ao pesquisar livro.'
+        ], 404);
     }
 
     /**
@@ -36,11 +57,16 @@ class LivroController extends Controller
      */
     public function update(Request $request, string $livro)
     {
-        $livro = Livro::findOrFail($livro);
+        $livro = Livro::find($livro);
+        if ($livro) {
+            $livro->update($request->all());
 
-        $livro->update($request->all());
+            return $livro;
+        }
 
-        return $livro;
+        return response()->json([
+            'message' => 'Erro ao atualizar o livro.'
+        ], 404);
     }
 
     /**
@@ -48,6 +74,13 @@ class LivroController extends Controller
      */
     public function destroy(string $livro)
     {
-        return Livro::destroy($livro);
+        if (Livro::destroy($livro)) {
+            return response()->json([
+                'message' => 'Livro apagado com sucesso.'
+            ]);
+        }
+        return response()->json([
+            'message' => 'Falha ao deletar o livro'
+        ], 404);
     }
 }
