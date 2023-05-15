@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('livros', function (Blueprint $table) {
             $table->id();
-            $table->integer('posicao');
             $table->string('nome');
+            $table->integer('posicao');
             $table->string('abreviacao');
             $table->unsignedBigInteger('testamento_id');
             $table->timestamps();

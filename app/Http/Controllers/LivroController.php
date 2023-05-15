@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Livro;
 use Illuminate\Http\Request;
 
 class LivroController extends Controller
@@ -11,7 +11,7 @@ class LivroController extends Controller
      */
     public function index()
     {
-        //
+        return Livro::all();
     }
 
     /**
@@ -19,7 +19,8 @@ class LivroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        return Livro::create($request->all());
     }
 
     /**
@@ -27,7 +28,7 @@ class LivroController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Livro::findOrFail($id);
     }
 
     /**
@@ -35,7 +36,11 @@ class LivroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $livro = Livro::findOrFail($id);
+
+        $livro->update($request->all());
+
+        return $livro;
     }
 
     /**
@@ -43,6 +48,6 @@ class LivroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return Livro::destroy($id);
     }
 }
